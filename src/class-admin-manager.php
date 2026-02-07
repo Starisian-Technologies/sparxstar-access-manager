@@ -230,7 +230,17 @@ class AdminManager {
             } else {
                 $scf_options = json_decode( $raw_scf_options, true );
                 if ( json_last_error() === JSON_ERROR_NONE ) {
-                    $sanitized['scf_options'] = $scf_options;
+                    // Validate that decoded result is an array
+                    if ( is_array( $scf_options ) ) {
+                        $sanitized['scf_options'] = $scf_options;
+                    } else {
+                        add_settings_error(
+                            'sparxstar_access_manager_options',
+                            'invalid_scf_json',
+                            __( 'SCF options must be a JSON object or array.', 'sparxstar-access-manager' )
+                        );
+                        $sanitized['scf_options'] = array();
+                    }
                 } else {
                     add_settings_error(
                         'sparxstar_access_manager_options',
@@ -251,7 +261,17 @@ class AdminManager {
             } else {
                 $rules = json_decode( $raw_rules, true );
                 if ( json_last_error() === JSON_ERROR_NONE ) {
-                    $sanitized['rules'] = $rules;
+                    // Validate that decoded result is an array
+                    if ( is_array( $rules ) ) {
+                        $sanitized['rules'] = $rules;
+                    } else {
+                        add_settings_error(
+                            'sparxstar_access_manager_options',
+                            'invalid_rules_json',
+                            __( 'Rules must be a JSON array.', 'sparxstar-access-manager' )
+                        );
+                        $sanitized['rules'] = array();
+                    }
                 } else {
                     add_settings_error(
                         'sparxstar_access_manager_options',

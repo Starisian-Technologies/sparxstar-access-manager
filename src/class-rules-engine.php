@@ -52,6 +52,11 @@ class RulesEngine {
         // Allow filtering of rules
         $this->rules = apply_filters( 'sparxstar_access_manager_rules', $this->rules );
 
+        // Ensure rules is an array before iterating
+        if ( ! is_array( $this->rules ) ) {
+            $this->rules = array();
+        }
+
         // Apply each rule
         foreach ( $this->rules as $rule ) {
             $this->apply_rule( $rule );

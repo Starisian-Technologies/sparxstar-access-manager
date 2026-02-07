@@ -41,11 +41,11 @@ class SecureCustomFieldManagerTest extends TestCase {
     }
 
     /**
-     * Test plugin is enabled by default
+     * Test plugin enabled state when options don't exist
      */
     public function test_is_enabled_default() {
         $manager = new SecureCustomFieldManager();
-        // With mocked get_option returning empty array, enabled should be false
-        $this->assertFalse( $manager->is_enabled() );
+        // With mocked get_option returning false (no option), plugin should default to enabled
+        $this->assertTrue( $manager->is_enabled() );
     }
 }

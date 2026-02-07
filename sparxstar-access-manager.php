@@ -46,15 +46,22 @@ function sparxstar_access_manager_init() {
 add_action( 'plugins_loaded', 'sparxstar_access_manager_init', 10 );
 
 /**
- * Activation hook - runs on each subsite when plugin is activated
+ * Activation hook - runs when plugin is activated as a regular plugin
+ * Note: This does NOT run for MU-plugins. For MU-plugin installs, defaults
+ * are initialized on first load via load_options() in SecureCustomFieldManager.
+ *
+ * @param bool $network_wide Whether the plugin is being activated network-wide
  */
-function sparxstar_access_manager_activate() {
-    // Check if we're on a multisite
-    if ( is_multisite() ) {
-        // Get the current site ID
+function sparxstar_access_manager_activate( $network_wide = false ) {
+    if ( is_multisite() && $network_wide ) {
+        // Network-wide activation: initialize all sites
+        $sites = get_sites( array( 'number' => 1000 ) );
+        foreach ( $sites as $site ) {
+            StarisianTechnologies\SparxstarAccessManager\Plugin::activate_for_site( $site->blog_id );
+        }
+    } elseif ( is_multisite() ) {
+        // Single subsite activation
         $current_site_id = get_current_blog_id();
-        
-        // Initialize default options for this subsite
         StarisianTechnologies\SparxstarAccessManager\Plugin::activate_for_site( $current_site_id );
     } else {
         // Single site activation

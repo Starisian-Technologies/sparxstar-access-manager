@@ -1,6 +1,6 @@
 # Sparxstar Access Manager
 
-A WordPress MU-plugin infrastructure that loads Secure Custom Field (SCF) options and enforces runtime rules with full multi-site network support.
+A WordPress multisite plugin scaffold that loads Secure Custom Field (SCF) options and enforces runtime rules with full multi-site network support.
 
 ## Features
 

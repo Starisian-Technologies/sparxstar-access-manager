@@ -27,7 +27,7 @@ if ( ! function_exists( 'add_filter' ) ) {
 }
 
 if ( ! function_exists( 'apply_filters' ) ) {
-    function apply_filters( $hook, $value ) {
+    function apply_filters( $hook, $value, ...$args ) {
         return $value;
     }
 }

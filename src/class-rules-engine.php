@@ -67,6 +67,9 @@ class RulesEngine {
      * @param array $rule Rule configuration
      */
     private function apply_rule( $rule ) {
+        if ( ! is_array( $rule ) ) {
+            return;
+        }
         if ( ! isset( $rule['type'] ) || ! isset( $rule['enabled'] ) || ! $rule['enabled'] ) {
             return;
         }

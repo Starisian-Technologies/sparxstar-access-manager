@@ -5,6 +5,7 @@ Plugin Name: SPARXSTAR Access Manager
 @Version: 1.4
 @Author: Starisian Technologies (Max Barrett) <support@starisian.com>
 */
+namespace Starisian\Sparxstar\access;
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 

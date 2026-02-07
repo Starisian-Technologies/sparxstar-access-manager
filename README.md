@@ -1,4 +1,5 @@
-# Sparxstar Access Manager
+![boson](https://github.com/user-attachments/assets/712dda46-101e-46ca-af97-908d5f548b3b)
+# SPARXSTAR™ Boson Scaffold
 
 A WordPress multisite plugin scaffold that loads Secure Custom Field (SCF) options and enforces runtime rules with full multi-site network support.
 
@@ -254,7 +255,7 @@ $rules_engine->enforce_rules();
 ## Support
 
 For issues, questions, or contributions, please visit:
-https://github.com/Starisian-Technologies/sparxstar-access-manager
+https://github.com/Starisian-Technologies/sparxstar-boson-scaffold
 
 ## License
 
@@ -263,3 +264,6 @@ MIT License - see [LICENSE](LICENSE) file for details
 ## Credits
 
 Developed by [Starisian Technologies](https://starisian.tech)
+Copyright (c) 2026 Starisian Technologies. 
+
+SPARXSTAR™ and Starisian Technologies™ are trademarks of Starisian Technologies. WordPress is a trademark of WorkPress Inc. Starisian Technologies is in no way associated with WordPress. 

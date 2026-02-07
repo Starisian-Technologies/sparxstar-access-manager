@@ -33,7 +33,7 @@ if ( ! function_exists( 'apply_filters' ) ) {
 }
 
 if ( ! function_exists( 'do_action' ) ) {
-    function do_action( $hook ) {
+    function do_action( $hook, ...$args ) {
         // Mock implementation
     }
 }

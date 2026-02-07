@@ -37,12 +37,25 @@ class SecureCustomFieldManager {
      * This loads site-specific options (no network-level options)
      */
     public function load_options() {
-        // Get site-specific options
-        $this->plugin_options = get_option( 'sparxstar_access_manager_options', array() );
-        
-        // Load SCF options
-        if ( isset( $this->plugin_options['scf_options'] ) ) {
+        // Get site-specific options. Use false as default so we can detect "option missing".
+        $this->plugin_options = get_option( 'sparxstar_access_manager_options', false );
+
+        // Initialize defaults if the option does not exist yet.
+        if ( false === $this->plugin_options ) {
+            $this->plugin_options = array(
+                'enabled'     => true,
+                'scf_options' => array(),
+            );
+
+            // Persist defaults so subsequent requests see a consistent structure.
+            update_option( 'sparxstar_access_manager_options', $this->plugin_options );
+        }
+
+        // Load SCF options, always ensuring an array.
+        if ( isset( $this->plugin_options['scf_options'] ) && is_array( $this->plugin_options['scf_options'] ) ) {
             $this->scf_options = $this->plugin_options['scf_options'];
+        } else {
+            $this->scf_options = array();
         }
 
         // Apply filters to allow other plugins to modify options

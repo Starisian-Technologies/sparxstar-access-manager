@@ -3,6 +3,8 @@
 
 A WordPress multisite plugin scaffold that loads Secure Custom Field (SCF) options and enforces runtime rules with full multi-site network support.
 
+[![Copilot code review](https://github.com/Starisian-Technologies/sparxstar-boson-scaffold/actions/workflows/copilot-pull-request-reviewer/copilot-pull-request-reviewer/badge.svg)](https://github.com/Starisian-Technologies/sparxstar-boson-scaffold/actions/workflows/copilot-pull-request-reviewer/copilot-pull-request-reviewer)  [![Copilot coding agent](https://github.com/Starisian-Technologies/sparxstar-boson-scaffold/actions/workflows/copilot-swe-agent/copilot/badge.svg)](https://github.com/Starisian-Technologies/sparxstar-boson-scaffold/actions/workflows/copilot-swe-agent/copilot)
+
 ## Features
 
 - **Multi-Site Network Support**: Designed for WordPress multi-site installations with subsite-specific settings

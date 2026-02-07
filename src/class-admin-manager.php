@@ -223,31 +223,43 @@ class AdminManager {
 
         // Sanitize SCF options JSON
         if ( isset( $input['scf_options'] ) ) {
-            $scf_options = json_decode( $input['scf_options'], true );
-            if ( json_last_error() === JSON_ERROR_NONE ) {
-                $sanitized['scf_options'] = $scf_options;
-            } else {
-                add_settings_error(
-                    'sparxstar_access_manager_options',
-                    'invalid_scf_json',
-                    __( 'Invalid JSON format for SCF options.', 'sparxstar-access-manager' )
-                );
+            $raw_scf_options = $input['scf_options'];
+            if ( is_string( $raw_scf_options ) && trim( $raw_scf_options ) === '' ) {
+                // Treat empty/whitespace-only input as an empty array without error.
                 $sanitized['scf_options'] = array();
+            } else {
+                $scf_options = json_decode( $raw_scf_options, true );
+                if ( json_last_error() === JSON_ERROR_NONE ) {
+                    $sanitized['scf_options'] = $scf_options;
+                } else {
+                    add_settings_error(
+                        'sparxstar_access_manager_options',
+                        'invalid_scf_json',
+                        __( 'Invalid JSON format for SCF options.', 'sparxstar-access-manager' )
+                    );
+                    $sanitized['scf_options'] = array();
+                }
             }
         }
 
         // Sanitize rules JSON
         if ( isset( $input['rules'] ) ) {
-            $rules = json_decode( $input['rules'], true );
-            if ( json_last_error() === JSON_ERROR_NONE ) {
-                $sanitized['rules'] = $rules;
-            } else {
-                add_settings_error(
-                    'sparxstar_access_manager_options',
-                    'invalid_rules_json',
-                    __( 'Invalid JSON format for rules.', 'sparxstar-access-manager' )
-                );
+            $raw_rules = $input['rules'];
+            if ( is_string( $raw_rules ) && trim( $raw_rules ) === '' ) {
+                // Treat empty/whitespace-only input as an empty array without error.
                 $sanitized['rules'] = array();
+            } else {
+                $rules = json_decode( $raw_rules, true );
+                if ( json_last_error() === JSON_ERROR_NONE ) {
+                    $sanitized['rules'] = $rules;
+                } else {
+                    add_settings_error(
+                        'sparxstar_access_manager_options',
+                        'invalid_rules_json',
+                        __( 'Invalid JSON format for rules.', 'sparxstar-access-manager' )
+                    );
+                    $sanitized['rules'] = array();
+                }
             }
         }
 

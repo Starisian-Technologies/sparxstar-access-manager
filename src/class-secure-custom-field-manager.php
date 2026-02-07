@@ -104,7 +104,12 @@ class SecureCustomFieldManager {
      * @return bool
      */
     public function is_enabled() {
-        return isset( $this->plugin_options['enabled'] ) && $this->plugin_options['enabled'];
+        if ( array_key_exists( 'enabled', $this->plugin_options ) ) {
+            return (bool) $this->plugin_options['enabled'];
+        }
+
+        // Default to enabled when the option has not been explicitly set.
+        return true;
     }
 
     /**

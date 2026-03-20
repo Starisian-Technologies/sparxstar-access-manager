@@ -1,80 +1,90 @@
 <?php
 /**
- * Plugin Name: Sparxstar Access Manager
- * Plugin URI: https://github.com/Starisian-Technologies/sparxstar-access-manager
- * Description: Infrastructure plugin that loads Secure Custom Field options and enforces runtime rules with multi-site support
- * Version: 1.0.0
- * Author: Starisian Technologies
- * Author URI: https://starisian.tech
- * License: MIT
- * Text Domain: sparxstar-access-manager
+ * Plugin Name: SPARXSTAR Boson Scaffold
+ * Plugin URI:  https://github.com/Starisian-Technologies/sparxstar-boson-scaffold
+ * Description: Named WordPress Multisite MU-plugin scaffold. Rename this plugin when building your own project.
+ * Version:     1.0.0
+ * Author:      Starisian Technologies
+ * Author URI:  https://starisian.tech
+ * License:     MIT
+ * License URI: https://opensource.org/licenses/MIT
+ * Text Domain: sparxstar-boson
  * Domain Path: /languages
- * Network: true
- * Requires at least: 5.8
- * Requires PHP: 7.4
+ * Network:     true
+ * Requires at least: 6.8
+ * Requires PHP: 8.2
+ *
+ * @package Starisian\Sparxstar\BosonScaffold
+ * @license MIT https://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2026 Starisian Technologies
+ *
+ * SPARXSTAR™ and Starisian Technologies™ are trademarks of Starisian Technologies.
+ * WordPress is a trademark of Automattic Inc. Starisian Technologies is not
+ * affiliated with or endorsed by Automattic Inc.
  */
+
+declare(strict_types=1);
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
     die;
 }
 
-// Define plugin constants
-define( 'SPARXSTAR_ACCESS_MANAGER_VERSION', '1.0.0' );
-define( 'SPARXSTAR_ACCESS_MANAGER_PLUGIN_FILE', __FILE__ );
-define( 'SPARXSTAR_ACCESS_MANAGER_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-define( 'SPARXSTAR_ACCESS_MANAGER_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'SPARXSTAR_ACCESS_MANAGER_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+// Define plugin constants — rename these when building your own project.
+define( 'SPX_BOSON_VERSION', '1.0.0' );
+define( 'SPX_BOSON_PLUGIN_FILE', __FILE__ );
+define( 'SPX_BOSON_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'SPX_BOSON_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'SPX_BOSON_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 
-// Load Composer autoloader if available
-if ( file_exists( SPARXSTAR_ACCESS_MANAGER_PLUGIN_DIR . 'vendor/autoload.php' ) ) {
-    require_once SPARXSTAR_ACCESS_MANAGER_PLUGIN_DIR . 'vendor/autoload.php';
+// Load Composer autoloader if available.
+if ( file_exists( SPX_BOSON_PLUGIN_DIR . 'vendor/autoload.php' ) ) {
+    require_once SPX_BOSON_PLUGIN_DIR . 'vendor/autoload.php';
 }
 
-// Load the plugin
-require_once SPARXSTAR_ACCESS_MANAGER_PLUGIN_DIR . 'src/class-plugin.php';
+// Load the plugin class.
+require_once SPX_BOSON_PLUGIN_DIR . 'src/class-plugin.php';
 
 /**
- * Initialize the plugin
+ * Initialize the plugin.
  */
-function sparxstar_access_manager_init() {
-    $plugin = StarisianTechnologies\SparxstarAccessManager\Plugin::get_instance();
+function spx_boson_init(): void {
+    $plugin = Starisian\Sparxstar\BosonScaffold\Plugin::get_instance();
     $plugin->init();
 }
 
-// Initialize on plugins_loaded hook to ensure all plugins are loaded
-add_action( 'plugins_loaded', 'sparxstar_access_manager_init', 10 );
+// Initialize on plugins_loaded hook to ensure all plugins are loaded.
+add_action( 'plugins_loaded', 'spx_boson_init', 10 );
 
 /**
- * Activation hook - runs when plugin is activated as a regular plugin
+ * Activation hook — runs when plugin is activated as a regular plugin.
+ *
  * Note: This does NOT run for MU-plugins. For MU-plugin installs, defaults
  * are initialized on first load via load_options() in SecureCustomFieldManager.
  *
- * @param bool $network_wide Whether the plugin is being activated network-wide
+ * @param bool $network_wide Whether the plugin is being activated network-wide.
  */
-function sparxstar_access_manager_activate( $network_wide = false ) {
+function spx_boson_activate( bool $network_wide = false ): void {
     if ( is_multisite() && $network_wide ) {
-        // Network-wide activation: initialize all sites
+        // Network-wide activation: initialize all sites.
         $sites = get_sites( array( 'number' => 1000 ) );
         foreach ( $sites as $site ) {
-            StarisianTechnologies\SparxstarAccessManager\Plugin::activate_for_site( $site->blog_id );
+            Starisian\Sparxstar\BosonScaffold\Plugin::activate_for_site( (int) $site->blog_id );
         }
     } elseif ( is_multisite() ) {
-        // Single subsite activation
-        $current_site_id = get_current_blog_id();
-        StarisianTechnologies\SparxstarAccessManager\Plugin::activate_for_site( $current_site_id );
+        // Single subsite activation.
+        Starisian\Sparxstar\BosonScaffold\Plugin::activate_for_site( get_current_blog_id() );
     } else {
-        // Single site activation
-        StarisianTechnologies\SparxstarAccessManager\Plugin::activate_for_site( null );
+        // Single site activation.
+        Starisian\Sparxstar\BosonScaffold\Plugin::activate_for_site( null );
     }
 }
-register_activation_hook( __FILE__, 'sparxstar_access_manager_activate' );
+register_activation_hook( __FILE__, 'spx_boson_activate' );
 
 /**
- * Deactivation hook
+ * Deactivation hook.
  */
-function sparxstar_access_manager_deactivate() {
-    // Cleanup if needed (but preserve settings)
-    StarisianTechnologies\SparxstarAccessManager\Plugin::deactivate();
+function spx_boson_deactivate(): void {
+    Starisian\Sparxstar\BosonScaffold\Plugin::deactivate();
 }
-register_deactivation_hook( __FILE__, 'sparxstar_access_manager_deactivate' );
+register_deactivation_hook( __FILE__, 'spx_boson_deactivate' );

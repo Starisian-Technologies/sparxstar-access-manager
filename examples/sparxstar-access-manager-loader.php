@@ -1,29 +1,30 @@
 <?php
 /**
- * Plugin Name: Sparxstar Access Manager Loader
- * Description: Loads the Sparxstar Access Manager MU-plugin for all subsites
- * Version: 1.0.0
- * Author: Starisian Technologies
- * License: MIT
- * 
- * This file should be placed in wp-content/mu-plugins/ directory
- * It loads the main plugin from the mu-plugins subdirectory
+ * SPARXSTAR Boson Scaffold — MU-Plugin Loader
+ *
+ * Place this file at: wp-content/mu-plugins/sparxstar-boson-loader.php
+ *
+ * It loads the Boson Scaffold from its subdirectory so WordPress MU-plugin
+ * autoloading works correctly. Rename this file when building your own project.
+ *
+ * @package   Starisian\Sparxstar\BosonScaffold
+ * @license   MIT https://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2026 Starisian Technologies
  */
+
+declare(strict_types=1);
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
     die;
 }
 
-// Define the path to the main plugin file
-$plugin_file = WPMU_PLUGIN_DIR . '/sparxstar-access-manager/sparxstar-access-manager.php';
+$spx_boson_plugin_file = WPMU_PLUGIN_DIR . '/sparxstar-boson-scaffold/sparxstar-access-manager.php';
 
-// Load the plugin if it exists
-if ( file_exists( $plugin_file ) ) {
-    require_once $plugin_file;
+if ( file_exists( $spx_boson_plugin_file ) ) {
+    require_once $spx_boson_plugin_file;
 } else {
-    // Log error if plugin file not found
-    if ( function_exists( 'error_log' ) ) {
-        error_log( 'Sparxstar Access Manager plugin file not found at: ' . $plugin_file );
-    }
+    error_log( 'SPARXSTAR Boson Scaffold: plugin file not found at: ' . $spx_boson_plugin_file ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 }
+
+unset( $spx_boson_plugin_file );

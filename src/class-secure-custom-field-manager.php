@@ -2,133 +2,133 @@
 /**
  * Secure Custom Field Manager
  *
- * @package StarisianTechnologies\SparxstarAccessManager
+ * @package   Starisian\Sparxstar\BosonScaffold
+ * @license   MIT https://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2026 Starisian Technologies
  */
 
-namespace StarisianTechnologies\SparxstarAccessManager;
+declare(strict_types=1);
+
+namespace Starisian\Sparxstar\BosonScaffold;
 
 /**
- * Manages Secure Custom Field options for the current site
+ * Manages Secure Custom Field options for the current site.
+ *
+ * Options are stored per-subsite in the site's own options table.
+ * Rename the option key (spx_boson_options) when building your own project.
  */
 class SecureCustomFieldManager {
+
     /**
-     * Loaded SCF options
+     * Site-specific options key.
      *
-     * @var array
+     * @var string
      */
-    private $scf_options = array();
+    private const OPTION_KEY = 'spx_boson_options';
 
     /**
-     * Plugin options
+     * Loaded SCF options.
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    private $plugin_options = array();
+    private array $scf_options = array();
 
     /**
-     * Constructor
+     * Plugin options (includes enabled flag, scf_options, rules).
+     *
+     * @var array<string, mixed>
      */
-    public function __construct() {
-        // Constructor
-    }
+    private array $plugin_options = array();
 
     /**
-     * Load SCF options from database
-     * This loads site-specific options (no network-level options)
+     * Load SCF options from the database (site-specific, no network-level options).
      */
-    public function load_options() {
-        // Get site-specific options. Use false as default so we can detect "option missing".
-        $this->plugin_options = get_option( 'sparxstar_access_manager_options', false );
+    public function load_options(): void {
+        /** @var array<string, mixed>|false $stored */
+        $stored = get_option( self::OPTION_KEY, false );
 
-        // Initialize defaults if the option does not exist yet.
-        if ( false === $this->plugin_options ) {
+        if ( false === $stored ) {
             $this->plugin_options = array(
                 'enabled'     => true,
                 'scf_options' => array(),
             );
-
-            // Persist defaults so subsequent requests see a consistent structure.
-            update_option( 'sparxstar_access_manager_options', $this->plugin_options );
-        }
-
-        // Load SCF options, always ensuring an array.
-        if ( isset( $this->plugin_options['scf_options'] ) && is_array( $this->plugin_options['scf_options'] ) ) {
-            $this->scf_options = $this->plugin_options['scf_options'];
+            update_option( self::OPTION_KEY, $this->plugin_options );
         } else {
-            $this->scf_options = array();
+            $this->plugin_options = $stored;
         }
 
-        // Apply filters to allow other plugins to modify options
-        $this->scf_options = apply_filters( 'sparxstar_access_manager_scf_options', $this->scf_options );
+        $this->scf_options = isset( $this->plugin_options['scf_options'] ) && is_array( $this->plugin_options['scf_options'] )
+            ? $this->plugin_options['scf_options']
+            : array();
 
-        // Hook to allow external SCF integration
-        do_action( 'sparxstar_access_manager_options_loaded', $this->scf_options );
+        /** @var array<string, mixed> $filtered */
+        $filtered          = apply_filters( 'spx_boson_scf_options', $this->scf_options );
+        $this->scf_options = $filtered;
+
+        do_action( 'spx_boson_options_loaded', $this->scf_options );
     }
 
     /**
-     * Get all SCF options
+     * Get all SCF options.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function get_options() {
+    public function get_options(): array {
         return $this->scf_options;
     }
 
     /**
-     * Get a specific SCF option
+     * Get a specific SCF option.
      *
-     * @param string $key Option key
-     * @param mixed  $default Default value
+     * @param string $key     Option key.
+     * @param mixed  $default Default value if key is not set.
      * @return mixed
      */
-    public function get_option( $key, $default = null ) {
-        return isset( $this->scf_options[ $key ] ) ? $this->scf_options[ $key ] : $default;
+    public function get_option( string $key, mixed $default = null ): mixed {
+        return $this->scf_options[ $key ] ?? $default;
     }
 
     /**
-     * Set SCF options
+     * Set SCF options and persist to the database.
      *
-     * @param array $options Options to set
-     * @return bool
+     * @param array<string, mixed> $options Options to save.
+     * @return bool True on success.
      */
-    public function set_options( $options ) {
-        $this->scf_options = $options;
+    public function set_options( array $options ): bool {
+        $this->scf_options                    = $options;
         $this->plugin_options['scf_options'] = $options;
-        
-        return update_option( 'sparxstar_access_manager_options', $this->plugin_options );
+        return update_option( self::OPTION_KEY, $this->plugin_options );
     }
 
     /**
-     * Check if plugin is enabled for current site
+     * Check whether this plugin is enabled for the current site.
      *
      * @return bool
      */
-    public function is_enabled() {
+    public function is_enabled(): bool {
         if ( array_key_exists( 'enabled', $this->plugin_options ) ) {
             return (bool) $this->plugin_options['enabled'];
         }
-
-        // Default to enabled when the option has not been explicitly set.
         return true;
     }
 
     /**
-     * Get plugin options
+     * Get all raw plugin options.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function get_plugin_options() {
+    public function get_plugin_options(): array {
         return $this->plugin_options;
     }
 
     /**
-     * Update plugin options
+     * Merge and persist plugin options.
      *
-     * @param array $options Options to update
-     * @return bool
+     * @param array<string, mixed> $options Options to merge.
+     * @return bool True on success.
      */
-    public function update_plugin_options( $options ) {
+    public function update_plugin_options( array $options ): bool {
         $this->plugin_options = array_merge( $this->plugin_options, $options );
-        return update_option( 'sparxstar_access_manager_options', $this->plugin_options );
+        return update_option( self::OPTION_KEY, $this->plugin_options );
     }
 }

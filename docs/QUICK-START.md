@@ -8,7 +8,7 @@
 ```json
 {
   "require": {
-    "starisian-technologies/sparxstar-access-manager": "^1.0"
+    "starisian-technologies/sparxstar-boson": "^1.0"
   },
   "extra": {
     "installer-paths": {
@@ -20,15 +20,15 @@
 
 2. Run: `composer install`
 
-3. Create loader: `wp-content/mu-plugins/sparxstar-access-manager-loader.php`:
+3. Create loader: `wp-content/mu-plugins/sparxstar-boson-loader.php`:
 ```php
 <?php
-require_once WPMU_PLUGIN_DIR . '/sparxstar-access-manager/sparxstar-access-manager.php';
+require_once WPMU_PLUGIN_DIR . '/sparxstar-boson/sparxstar-boson.php';
 ```
 
 ### Manual Installation:
 
-1. Clone to: `wp-content/mu-plugins/sparxstar-access-manager/`
+1. Clone to: `wp-content/mu-plugins/sparxstar-boson/`
 2. Run: `composer install --no-dev`
 3. Create loader file (same as above)
 
@@ -67,7 +67,7 @@ require_once WPMU_PLUGIN_DIR . '/sparxstar-access-manager/sparxstar-access-manag
 
 ### Get Plugin Instance:
 ```php
-$plugin = \StarisianTechnologies\SparxstarAccessManager\Plugin::get_instance();
+$plugin = \Starisian\Sparxstar\BosonScaffold\Plugin::get_instance();
 ```
 
 ### Get SCF Options:
@@ -88,7 +88,7 @@ if ( $scf_manager->is_enabled() ) {
 
 ### Add Custom SCF Options:
 ```php
-add_filter('sparxstar_access_manager_scf_options', function($options) {
+add_filter('spx_boson_scf_options', function($options) {
     $options['custom'] = 'value';
     return $options;
 });
@@ -96,7 +96,7 @@ add_filter('sparxstar_access_manager_scf_options', function($options) {
 
 ### Add Custom Rules:
 ```php
-add_filter('sparxstar_access_manager_rules', function($rules) {
+add_filter('spx_boson_rules', function($rules) {
     $rules[] = ['type' => 'custom', 'enabled' => true];
     return $rules;
 });
@@ -104,7 +104,7 @@ add_filter('sparxstar_access_manager_rules', function($rules) {
 
 ### Handle Custom Rules:
 ```php
-add_filter('sparxstar_access_manager_handle_rule', function($handled, $rule) {
+add_filter('spx_boson_handle_rule', function($handled, $rule) {
     if ($rule['type'] === 'custom') {
         // Your logic here
         return true;

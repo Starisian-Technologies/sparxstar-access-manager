@@ -1,35 +1,68 @@
 ![boson](https://github.com/user-attachments/assets/712dda46-101e-46ca-af97-908d5f548b3b)
 # SPARXSTAR™ Boson Scaffold
 
-A WordPress multisite plugin scaffold that loads Secure Custom Field (SCF) options and enforces runtime rules with full multi-site network support.
+> **This is a named scaffold.** It is designed to be renamed and extended when building your own WordPress Multisite plugin. See [Renaming This Scaffold](#renaming-this-scaffold) before writing any production code.
+
+A WordPress Multisite MU-plugin scaffold that loads Secure Custom Field (SCF) options and enforces runtime rules, with full per-subsite network support.
+
+Built to the [SPARXSTAR Engineering Standards v2](docs/ENGINEERING-STANDARDS.md) — Multisite-first, PHP 8.2+, WordPress 6.8+, offline-ready.
 
 [![Copilot code review](https://github.com/Starisian-Technologies/sparxstar-boson-scaffold/actions/workflows/copilot-pull-request-reviewer/copilot-pull-request-reviewer/badge.svg)](https://github.com/Starisian-Technologies/sparxstar-boson-scaffold/actions/workflows/copilot-pull-request-reviewer/copilot-pull-request-reviewer)  [![Copilot coding agent](https://github.com/Starisian-Technologies/sparxstar-boson-scaffold/actions/workflows/copilot-swe-agent/copilot/badge.svg)](https://github.com/Starisian-Technologies/sparxstar-boson-scaffold/actions/workflows/copilot-swe-agent/copilot)
 
+---
+
+## Renaming This Scaffold
+
+**Before writing a single line of your own logic**, rename the following identifiers throughout the codebase:
+
+| What to change | Current value | Replace with |
+|---|---|---|
+| Plugin Name (header) | `SPARXSTAR Boson Scaffold` | `My Product Name` |
+| PHP Namespace | `Starisian\Sparxstar\BosonScaffold` | `Vendor\MyProduct\{Module}` |
+| PHP/WP function prefix | `spx_boson_` | `mypfx_` |
+| Constants prefix | `SPX_BOSON_` | `MYPFX_` |
+| WordPress option key | `spx_boson_options` | `mypfx_options` |
+| Hook names | `spx_boson_*` | `mypfx_*` |
+| Text domain | `sparxstar-boson` | `my-product` |
+| Composer package name | `starisian-technologies/sparxstar-boson-scaffold` | `vendor/my-product` |
+| `phpcs.xml` prefixes | `spx_boson`, `SPX_BOSON`, `Starisian\Sparxstar\BosonScaffold` | your own |
+
+Use your editor's project-wide find-and-replace, then run `composer install` and `make lint` to verify.
+
+---
+
 ## Features
 
-- **Multi-Site Network Support**: Designed for WordPress multi-site installations with subsite-specific settings
-- **Secure Custom Field Integration**: Load and manage SCF options per subsite
-- **Runtime Rules Engine**: Enforce access control and validation rules dynamically
-- **Composer-Ready**: Install via WordPress Composer using `wordpress-muplugin` type
-- **Subsite-Specific Settings**: Each subsite has its own configuration (no network-level settings)
-- **Extensible Architecture**: Filter and action hooks for custom integrations
+- **Multisite-First Architecture** — Designed for WordPress Multisite from line one; never retrofitted
+- **Per-Subsite Settings** — Each subsite has independent configuration (no network-level settings)
+- **Secure Custom Field Integration** — Load and manage SCF options per subsite
+- **Runtime Rules Engine** — Enforce access control and validation rules dynamically
+- **Frontend Access Control** — ACF-based query, REST, AJAX, template, and admin enforcement
+- **Composer-Ready** — Install via `wordpress-muplugin` type
+- **Extensible** — Full filter and action hook API
+
+---
 
 ## Requirements
 
-- PHP 7.4 or higher
-- WordPress 5.8 or higher
-- Multi-site network (optional, works on single sites too)
+- **PHP 8.2+** (strict types required)
+- **WordPress 6.8+**
+- **WordPress Multisite** (recommended; works on single-site for development)
+- **Composer** for dependency management
+- **Node.js 20+** for JS/CSS/Markdown linting
+
+---
 
 ## Installation
 
 ### Method 1: Composer (Recommended)
 
-Add to your `composer.json`:
+Add to your project's `composer.json`:
 
 ```json
 {
   "require": {
-    "starisian-technologies/sparxstar-access-manager": "^1.0"
+    "starisian-technologies/sparxstar-boson-scaffold": "^1.0"
   },
   "extra": {
     "installer-paths": {
@@ -45,42 +78,40 @@ Then run:
 composer install
 ```
 
-For multi-site, create a loader file at `wp-content/mu-plugins/sparxstar-access-manager-loader.php`:
+Create a loader file at `wp-content/mu-plugins/sparxstar-boson-loader.php`:
 
 ```php
 <?php
-/**
- * Plugin Name: Sparxstar Access Manager Loader
- * Description: Loads the Sparxstar Access Manager MU-plugin
- */
-require_once WPMU_PLUGIN_DIR . '/sparxstar-access-manager/sparxstar-access-manager.php';
+// See examples/sparxstar-access-manager-loader.php
+require_once WPMU_PLUGIN_DIR . '/sparxstar-boson-scaffold/sparxstar-access-manager.php';
 ```
 
-### Method 2: Manual Installation
+### Method 2: Manual
 
-1. Clone or download this repository to `wp-content/mu-plugins/sparxstar-access-manager/`
-2. For multi-site, create the loader file as shown above
-3. The plugin will be automatically loaded on all subsites
+1. Clone to `wp-content/mu-plugins/sparxstar-boson-scaffold/`
+2. Run `composer install --no-dev`
+3. Create the loader file as shown above
 
-### Multi-Site Network Activation
-
-For multi-site installations:
+### Multisite Network Activation
 
 1. The plugin loads automatically via the MU-plugins system
-2. Each subsite gets its own settings page under Settings → Access Manager
-3. There are NO network-level settings - all configuration is per subsite
-4. When a new subsite is created, default settings are automatically initialized
+2. Each subsite gets its own settings page under **Settings → Boson Scaffold**
+3. New subsites are automatically initialized with default settings
+
+---
 
 ## Configuration
 
 ### Admin Interface
 
-Each subsite has its own settings page at **Settings → Access Manager**.
+Each subsite has its own settings page at **Settings → Boson Scaffold**.
 
 #### General Settings
-- Enable/disable the plugin for the current subsite
+
+Enable or disable the scaffold for the current subsite.
 
 #### Secure Custom Field Options
+
 Configure SCF options in JSON format:
 
 ```json
@@ -92,6 +123,7 @@ Configure SCF options in JSON format:
 ```
 
 #### Runtime Rules
+
 Define enforcement rules in JSON format:
 
 ```json
@@ -117,155 +149,170 @@ Define enforcement rules in JSON format:
 
 **Modify SCF Options:**
 ```php
-add_filter('sparxstar_access_manager_scf_options', function($options) {
+add_filter( 'spx_boson_scf_options', function( array $options ): array {
     $options['custom_key'] = 'custom_value';
     return $options;
-});
+} );
 ```
 
 **Modify Rules:**
 ```php
-add_filter('sparxstar_access_manager_rules', function($rules) {
+add_filter( 'spx_boson_rules', function( array $rules ): array {
     $rules[] = [
-        'type' => 'custom_rule',
+        'type'    => 'custom_rule',
         'enabled' => true,
-        'config' => ['key' => 'value']
+        'config'  => ['key' => 'value'],
     ];
     return $rules;
-});
+} );
 ```
 
 **Handle Custom Rule Types:**
 ```php
-add_filter('sparxstar_access_manager_handle_rule', function($handled, $rule) {
-    if ($rule['type'] === 'my_custom_type') {
+add_filter( 'spx_boson_handle_rule', function( bool $handled, array $rule ): bool {
+    if ( $rule['type'] === 'my_custom_type' ) {
         // Handle your custom rule
         return true;
     }
     return $handled;
-}, 10, 2);
+}, 10, 2 );
 ```
 
 #### Actions
 
 **After Options Loaded:**
 ```php
-add_action('sparxstar_access_manager_options_loaded', function($options) {
-    // Do something after SCF options are loaded
-});
+add_action( 'spx_boson_options_loaded', function( array $options ): void {
+    // React to SCF options being loaded
+} );
 ```
 
 **After Rules Enforced:**
 ```php
-add_action('sparxstar_access_manager_rules_enforced', function($rules) {
-    // Do something after rules are enforced
-});
+add_action( 'spx_boson_rules_enforced', function( array $rules ): void {
+    // React to rules being enforced
+} );
 ```
+
+---
 
 ## Development
 
-### Setup Development Environment
+### Setup
 
 ```bash
-# Install dependencies
+# Install PHP dependencies
 composer install
 
-# Run linter
-composer lint
-
-# Fix code style issues
-composer lint:fix
-
-# Run tests
-composer test
-
-# Generate coverage report
-composer test:coverage
+# Install Node.js dependencies
+npm install
 ```
 
-### Running Tests
+### Linting
+
+```bash
+# Run all linters (PHPCS, PHPStan, ESLint, Stylelint, markdownlint, JSON)
+make lint
+
+# PHP only
+make lint-php
+
+# PHPStan static analysis (Level 5)
+make lint-phpstan
+
+# JavaScript
+make lint-js
+
+# CSS / SCSS
+make lint-css
+
+# Markdown
+make lint-md
+
+# JSON
+make lint-json
+```
+
+> **Note:** `make lint` runs in **report mode only**. Auto-fix (`make lint-fix`) is never run in CI.
+
+### Testing
 
 ```bash
 # Run all tests
-composer test
+make test
 
-# Run specific test suite
+# Run with HTML coverage
+make test-coverage
+
+# Run a specific test suite
 vendor/bin/phpunit tests/unit
 vendor/bin/phpunit tests/integration
 ```
 
-### Code Standards
-
-This project follows WordPress Coding Standards. Run the linter before committing:
-
-```bash
-composer lint
-```
+---
 
 ## Architecture
 
 ### Core Components
 
-1. **Plugin Class** (`class-plugin.php`): Main plugin orchestrator
-2. **Secure Custom Field Manager** (`class-secure-custom-field-manager.php`): Manages SCF options per subsite
-3. **Rules Engine** (`class-rules-engine.php`): Enforces runtime rules
-4. **Admin Manager** (`class-admin-manager.php`): Handles subsite-specific admin interface
+| File | Class | Responsibility |
+|---|---|---|
+| `src/class-plugin.php` | `Plugin` | Singleton orchestrator |
+| `src/class-secure-custom-field-manager.php` | `SecureCustomFieldManager` | Per-subsite SCF options |
+| `src/class-rules-engine.php` | `RulesEngine` | Runtime rule enforcement |
+| `src/class-admin-manager.php` | `AdminManager` | Subsite settings UI |
+| `src/sparxstar-access-manager.php` | `FrontendAccess` | ACF-based access control |
 
-### Multi-Site Architecture
+### Multisite Architecture
 
-- Each subsite stores its configuration in its own options table
-- No network-level settings or configurations
-- New subsites automatically get initialized with default settings
-- Plugin can be activated/deactivated per subsite if installed as a regular plugin
-- When installed as MU-plugin, it's always active but can be enabled/disabled per subsite via settings
+- Each subsite stores its own configuration in its own options table
+- No network-level settings or shared configurations
+- New subsites are automatically initialized on creation
+- Can be installed as a regular plugin (per-subsite) or as an MU-plugin (always active)
 
-## API Reference
+### Namespace
 
-### SecureCustomFieldManager
-
-```php
-// Get all SCF options
-$options = $scf_manager->get_options();
-
-// Get specific option with default
-$value = $scf_manager->get_option('key', 'default');
-
-// Set SCF options
-$scf_manager->set_options(['key' => 'value']);
-
-// Check if plugin is enabled for current site
-$enabled = $scf_manager->is_enabled();
+```
+Starisian\Sparxstar\BosonScaffold\
 ```
 
-### RulesEngine
+> Rename this to `Vendor\YourProduct\{Module}` before shipping.
 
-```php
-// Get all rules
-$rules = $rules_engine->get_rules();
-
-// Enforce rules manually
-$rules_engine->enforce_rules();
-```
+---
 
 ## Security
 
-- All admin inputs are sanitized
+- All admin inputs follow **Sanitize → Validate → Escape** order
 - JSON configurations are validated before saving
-- Proper WordPress nonces and capability checks
-- Follows WordPress security best practices
+- WordPress nonces and capability checks on all admin actions
+- PHP 8.2+ strict types throughout
+- PHPStan Level 5 static analysis
+- WordPress VIP coding standards enforced
+
+---
+
+## API Reference
+
+See [docs/API.md](docs/API.md) for the full hook and class reference.
+
+---
 
 ## Support
 
-For issues, questions, or contributions, please visit:
+For issues, questions, or contributions:
 https://github.com/Starisian-Technologies/sparxstar-boson-scaffold
+
+---
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) file for details
+MIT License — see [LICENSE](LICENSE)
+
+---
 
 ## Credits
 
 Developed by [Starisian Technologies](https://starisian.tech)
-Copyright (c) 2026 Starisian Technologies. 
+Copyright © 2026 Starisian Technologies.
 
-SPARXSTAR™ and Starisian Technologies™ are trademarks of Starisian Technologies. WordPress is a trademark of WorkPress Inc. Starisian Technologies is in no way associated with WordPress. 
+SPARXSTAR™ and Starisian Technologies™ are trademarks of Starisian Technologies. WordPress is a trademark of Automattic Inc. Starisian Technologies is not affiliated with or endorsed by Automattic Inc.

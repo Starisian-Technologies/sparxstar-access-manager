@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: help install install-npm test lint lint-php lint-phpstan lint-js lint-css lint-md lint-json lint-fix clean
+.PHONY: help install install-npm test lint lint-php lint-phpstan lint-js lint-css lint-md lint-html lint-json lint-fix clean
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
@@ -19,7 +19,7 @@ test: ## Run PHPUnit tests
 test-coverage: ## Run tests with HTML coverage report
 	vendor/bin/phpunit --coverage-html coverage
 
-lint: lint-php lint-phpstan lint-js lint-css lint-md lint-json ## Run all linters (report mode — no auto-fix)
+lint: lint-php lint-phpstan lint-js lint-css lint-md lint-html lint-json ## Run all linters (report mode — no auto-fix)
 
 lint-php: ## Run PHPCS (WordPress VIP + PSR-12)
 	vendor/bin/phpcs
@@ -35,6 +35,9 @@ lint-css: ## Run Stylelint
 
 lint-md: ## Run markdownlint
 	npm run lint:md
+
+lint-html: ## Run HTMLHint
+	npm run lint:html
 
 lint-json: ## Validate JSON files
 	npm run lint:json

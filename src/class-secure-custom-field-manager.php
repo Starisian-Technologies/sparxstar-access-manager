@@ -51,6 +51,7 @@ class SecureCustomFieldManager {
             $this->plugin_options = array(
                 'enabled'     => true,
                 'scf_options' => array(),
+                'rules'       => array(),
             );
             update_option( self::OPTION_KEY, $this->plugin_options );
         } else {

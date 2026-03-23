@@ -8,7 +8,7 @@
 ```json
 {
   "require": {
-    "starisian-technologies/sparxstar-boson": "^1.0"
+    "starisian-technologies/sparxstar-boson-scaffold": "^1.0"
   },
   "extra": {
     "installer-paths": {
@@ -23,12 +23,12 @@
 3. Create loader: `wp-content/mu-plugins/sparxstar-boson-loader.php`:
 ```php
 <?php
-require_once WPMU_PLUGIN_DIR . '/sparxstar-boson/sparxstar-boson.php';
+require_once WPMU_PLUGIN_DIR . '/sparxstar-boson-scaffold/sparxstar-access-manager.php';
 ```
 
 ### Manual Installation:
 
-1. Clone to: `wp-content/mu-plugins/sparxstar-boson/`
+1. Clone to: `wp-content/mu-plugins/sparxstar-boson-scaffold/`
 2. Run: `composer install --no-dev`
 3. Create loader file (same as above)
 
@@ -37,7 +37,7 @@ require_once WPMU_PLUGIN_DIR . '/sparxstar-boson/sparxstar-boson.php';
 ### Per Subsite:
 
 1. Log into subsite admin
-2. Go to: **Settings → Access Manager**
+2. Go to: **Settings → Boson Scaffold**
 3. Configure:
    - Enable/disable plugin
    - Set SCF options (JSON)
@@ -151,7 +151,7 @@ make lint       # Run linter
 
 - **Settings are per-subsite** - Each subsite has independent configuration
 - **Network Admin** - Plugin settings do NOT appear in network admin
-- **Subsite Admin** - Settings → Access Manager available on each subsite
+- **Subsite Admin** - Settings → Boson Scaffold available on each subsite
 - **Auto-activation** - New subsites automatically get default settings
 
 ## Support

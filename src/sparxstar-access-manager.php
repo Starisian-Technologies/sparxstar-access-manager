@@ -408,7 +408,7 @@ if ( $this->is_current_url( (string) $redirect ) ) {
 return;
 }
 
-wp_redirect( (string) $redirect ); // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
+wp_safe_redirect( (string) $redirect );
 exit;
 }
 

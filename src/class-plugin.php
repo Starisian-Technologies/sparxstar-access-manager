@@ -82,6 +82,7 @@ class Plugin {
         require_once SPX_BOSON_PLUGIN_DIR . 'src/class-secure-custom-field-manager.php';
         require_once SPX_BOSON_PLUGIN_DIR . 'src/class-rules-engine.php';
         require_once SPX_BOSON_PLUGIN_DIR . 'src/class-admin-manager.php';
+        require_once SPX_BOSON_PLUGIN_DIR . 'src/sparxstar-access-manager.php';
     }
 
     /**

@@ -52,7 +52,7 @@ Create file `wp-content/mu-plugins/sparxstar-boson-loader.php`:
  * Plugin Name: SPARXSTAR Boson Scaffold Loader
  * Description: Loads the SPARXSTAR Boson Scaffold MU-plugin
  */
-require_once WPMU_PLUGIN_DIR . '/sparxstar-boson/sparxstar-boson.php';
+require_once WPMU_PLUGIN_DIR . '/sparxstar-boson-scaffold/sparxstar-access-manager.php';
 ```
 
 ### Method 2: Manual Installation

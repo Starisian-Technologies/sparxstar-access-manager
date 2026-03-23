@@ -454,7 +454,7 @@ return $content;
 
 if ( ! $this->is_allowed( $post ) ) {
 /** @var string $placeholder */
-$placeholder = apply_filters( 'spx_restricted_placeholder', '' );
+$placeholder = apply_filters( 'spx_boson_restricted_placeholder', '' );
 return $placeholder;
 }
 

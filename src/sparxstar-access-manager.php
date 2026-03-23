@@ -22,41 +22,42 @@ if ( ! defined( 'ABSPATH' ) ) {
  * PART 1: FIELD REGISTRATION
  * -------------------------------------------------------------------------- */
 add_action(
-'acf/init',
-static function (): void {
-if ( ! function_exists( 'acf_add_options_page' ) ) {
-return;
-}
-acf_add_options_page(
-array(
-'page_title' => 'Site Access',
-'menu_slug'  => 'spx-site-access',
-'menu_title' => 'Frontend Restrictions',
-'menu_icon'  => 'dashicons-shield',
-'redirect'   => false,
-'autoload'   => true,
-'capability' => 'manage_options',
-)
-);
-}
+    'acf/init',
+    static function (): void {
+        if ( ! function_exists( 'acf_add_options_page' ) ) {
+            return;
+        }
+
+        acf_add_options_page(
+            array(
+                'page_title' => 'Site Access',
+                'menu_slug'  => 'spx-site-access',
+                'menu_title' => 'Frontend Restrictions',
+                'menu_icon'  => 'dashicons-shield',
+                'redirect'   => false,
+                'autoload'   => true,
+                'capability' => 'manage_options',
+            )
+        );
+    }
 );
 
 add_action(
-'acf/include_fields',
-static function (): void {
-if ( ! function_exists( 'acf_add_local_field_group' ) ) {
-return;
-}
+    'acf/include_fields',
+    static function (): void {
+        if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+            return;
+        }
 
-acf_add_local_field_group(
-array(
-'key'      => 'group_spx_site_access',
-'title'    => 'Site Access',
-'location' => array(
-array(
-array(
-'param'    => 'options_page',
-'operator' => '==',
+        acf_add_local_field_group(
+            array(
+                'key'      => 'group_spx_site_access',
+                'title'    => 'Site Access',
+                'location' => array(
+                    array(
+                        array(
+                            'param'    => 'options_page',
+                            'operator' => '==',
 'value'    => 'spx-site-access',
 ),
 ),

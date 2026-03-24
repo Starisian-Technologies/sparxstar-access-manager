@@ -63,6 +63,8 @@
                 <element value="Starisian\Sparxstar\BosonScaffold"/>
             </property>
         </properties>
+        <!-- Tests define intentional WordPress core function stubs — exclude from prefix enforcement -->
+        <exclude-pattern>*/tests/*</exclude-pattern>
     </rule>
 
     <!-- Require strict_types in every file -->

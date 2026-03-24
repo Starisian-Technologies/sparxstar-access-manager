@@ -58,29 +58,29 @@ add_action(
                         array(
                             'param'    => 'options_page',
                             'operator' => '==',
-'value'    => 'spx-site-access',
-),
-),
-),
-'fields'   => array(
-array(
-'key'           => 'field_spx_frontend_enabled',
-'label'         => 'Frontend Post Type Restrictions Enabled',
-'name'          => 'spx_frontend_restrictions_enabled',
-'type'          => 'true_false',
-'ui'            => 1,
-'default_value' => 1,
-),
-array(
-'key'               => 'field_spx_default_redirect',
-'label'             => 'Default Redirection Target URL',
-'name'              => 'spx_default_redirection_target_url',
-'type'              => 'url',
-'required'          => 1,
-'default_value'     => home_url(),
-'conditional_logic' => array(
-array(
-array(
+                            'value'    => 'spx-site-access',
+                        ),
+                    ),
+                ),
+                'fields'   => array(
+                    array(
+                        'key'           => 'field_spx_frontend_enabled',
+                        'label'         => 'Frontend Post Type Restrictions Enabled',
+                        'name'          => 'spx_frontend_restrictions_enabled',
+                        'type'          => 'true_false',
+                        'ui'            => 1,
+                        'default_value' => 1,
+                    ),
+                    array(
+                        'key'               => 'field_spx_default_redirect',
+                        'label'             => 'Default Redirection Target URL',
+                        'name'              => 'spx_default_redirection_target_url',
+                        'type'              => 'url',
+                        'required'          => 1,
+                        'default_value'     => home_url(),
+                        'conditional_logic' => array(
+                            array(
+                                array(
 'field'    => 'field_spx_frontend_enabled',
 'operator' => '==',
 'value'    => '1',

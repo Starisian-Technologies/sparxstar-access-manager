@@ -183,7 +183,8 @@ composer update starisian-technologies/sparxstar-boson-scaffold
 
 ### Plugin Not Showing in Subsite Admin
 
-- Verify the loader file exists: `wp-content/mu-plugins/sparxstar-boson-loader.php`- Check file permissions (files should be readable by web server)
+- Verify the loader file exists: `wp-content/mu-plugins/sparxstar-boson-loader.php`
+- Check file permissions (files should be readable by web server)
 - Check error logs for any PHP errors
 
 ### Settings Not Saving

@@ -353,9 +353,16 @@ return $args;
 
 $meta_query   = isset( $args['meta_query'] ) && is_array( $args['meta_query'] ) ? $args['meta_query'] : array();
 $meta_query[] = array(
-'key'     => 'spx_frontend_restriction',
-'value'   => '1',
-'compare' => '!=',
+    'relation' => 'OR',
+    array(
+        'key'     => 'spx_frontend_restriction',
+        'compare' => 'NOT EXISTS',
+    ),
+    array(
+        'key'     => 'spx_frontend_restriction',
+        'value'   => '1',
+        'compare' => '!=',
+    ),
 );
 
 $args['meta_query'] = $meta_query;
@@ -371,9 +378,16 @@ private function apply_exclusion_query( \WP_Query $query ): void {
 $meta_query   = $query->get( 'meta_query' );
 $meta_query   = is_array( $meta_query ) ? $meta_query : array();
 $meta_query[] = array(
-'key'     => 'spx_frontend_restriction',
-'value'   => '1',
-'compare' => '!=',
+    'relation' => 'OR',
+    array(
+        'key'     => 'spx_frontend_restriction',
+        'compare' => 'NOT EXISTS',
+    ),
+    array(
+        'key'     => 'spx_frontend_restriction',
+        'value'   => '1',
+        'compare' => '!=',
+    ),
 );
 $query->set( 'meta_query', $meta_query );
 }

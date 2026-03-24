@@ -56,6 +56,7 @@ SPARXSTAR Boson Scaffold — a WordPress Multisite MU-plugin scaffold built to S
 | `spx_boson_rules` | Modify rules before enforcement |
 | `spx_boson_handle_rule` | Handle custom rule types |
 | `spx_boson_restricted_placeholder` | Custom placeholder for restricted content |
+| `spx_boson_admin_redirect_url` | Override admin redirect destination (default: `home_url()`); required for domain-mapping plugins such as Mercator |
 
 ### Actions
 

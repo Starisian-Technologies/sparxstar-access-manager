@@ -55,7 +55,7 @@ SPARXSTAR Boson Scaffold — a WordPress Multisite MU-plugin scaffold built to S
 | `spx_boson_scf_options` | Modify loaded SCF options |
 | `spx_boson_rules` | Modify rules before enforcement |
 | `spx_boson_handle_rule` | Handle custom rule types |
-| `spx_restricted_placeholder` | Custom placeholder for restricted content |
+| `spx_boson_restricted_placeholder` | Custom placeholder for restricted content |
 
 ### Actions
 

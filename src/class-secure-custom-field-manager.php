@@ -47,12 +47,14 @@ class SecureCustomFieldManager {
         /** @var array<string, mixed>|false $stored */
         $stored = get_option( self::OPTION_KEY, false );
 
-        if ( false === $stored ) {
-            $this->plugin_options = array(
-                'enabled'     => true,
-                'scf_options' => array(),
-                'rules'       => array(),
-            );
+        $defaults = array(
+            'enabled'     => true,
+            'scf_options' => array(),
+            'rules'       => array(),
+        );
+
+        if ( false === $stored || ! is_array( $stored ) ) {
+            $this->plugin_options = $defaults;
             update_option( self::OPTION_KEY, $this->plugin_options );
         } else {
             $this->plugin_options = $stored;

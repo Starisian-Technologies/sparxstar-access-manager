@@ -9,7 +9,11 @@ module.exports = [
       "vendor/**",
       "coverage/**",
       "dist/**",
-      "build/**"
+      "build/**",
+      "eslint.config.js",
+      "*.config.js",
+      "*.config.cjs",
+      "*.config.mjs"
     ],
     languageOptions: {
       ecmaVersion: 2022,

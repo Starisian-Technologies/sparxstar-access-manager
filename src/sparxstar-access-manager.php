@@ -289,7 +289,7 @@ class FrontendAccess {
         if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
             return;
         }
-        if ( current_user_can( 'administrator' ) ) {
+        if ( current_user_can( 'manage_options' ) || is_super_admin() ) {
             return;
         }
 
@@ -347,7 +347,7 @@ class FrontendAccess {
      * @return array<string, mixed>
      */
     public function filter_rest_query( array $args, \WP_REST_Request $request ): array { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
-        if ( current_user_can( 'administrator' ) ) {
+        if ( current_user_can( 'manage_options' ) || ( is_multisite() && is_super_admin() ) ) {
             return $args;
         }
 
@@ -499,7 +499,13 @@ class FrontendAccess {
         }
 
         $user = wp_get_current_user();
-        if ( user_can( $user, 'administrator' ) ) {
+        if (
+            $user instanceof \WP_User
+            && (
+                user_can( $user, 'manage_options' )
+                || ( function_exists( 'is_super_admin' ) && is_super_admin( (int) $user->ID ) )
+            )
+        ) {
             return true;
         }
 
@@ -554,7 +560,13 @@ class FrontendAccess {
         }
 
         $user = wp_get_current_user();
-        if ( user_can( $user, 'administrator' ) ) {
+        if (
+            $user instanceof \WP_User
+            && (
+                user_can( $user, 'manage_options' )
+                || ( is_multisite() && is_super_admin( (int) $user->ID ) )
+            )
+        ) {
             return;
         }
 
@@ -609,9 +621,14 @@ class FrontendAccess {
         if ( ! $user instanceof \WP_User ) {
             return $redirect_to;
         }
+        $is_admin_user = $user instanceof \WP_User
+            && (
+                user_can( $user, 'manage_options' )
+                || ( is_multisite() && is_super_admin( (int) $user->ID ) )
+            );
         if ( function_exists( 'get_field' )
             && get_field( 'spx_restrict_wp_admin', 'option' )
-            && ! user_can( $user, 'administrator' )
+            && ! $is_admin_user
         ) {
             $dash = get_field( 'spx_redirect_url_after_login', 'option' );
             if ( $dash ) {

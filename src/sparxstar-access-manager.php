@@ -328,7 +328,7 @@ class FrontendAccess {
      * @param \WP_Query $query The current query object.
      */
     public function filter_main_query( \WP_Query $query ): void {
-        if ( is_admin() || current_user_can( 'administrator' ) ) {
+        if ( is_admin() || current_user_can( 'manage_options' ) || ( is_multisite() && is_super_admin() ) ) {
             return;
         }
 

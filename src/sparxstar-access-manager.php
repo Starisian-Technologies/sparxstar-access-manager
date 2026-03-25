@@ -81,165 +81,165 @@ add_action(
                         'conditional_logic' => array(
                             array(
                                 array(
-'field'    => 'field_spx_frontend_enabled',
-'operator' => '==',
-'value'    => '1',
-),
-),
-),
-),
-array(
-'key'           => 'field_spx_admin_restricted',
-'label'         => 'Restrict WP-Admin',
-'name'          => 'spx_restrict_wp_admin',
-'type'          => 'true_false',
-'ui'            => 1,
-'default_value' => 1,
-),
-array(
-'key'               => 'field_spx_admin_redirect',
-'label'             => 'Redirect URL After Login',
-'name'              => 'spx_redirect_url_after_login',
-'type'              => 'url',
-'default_value'     => home_url( '/star-dashboard/' ),
-'conditional_logic' => array(
-array(
-array(
-'field'    => 'field_spx_admin_restricted',
-'operator' => '==',
-'value'    => '1',
-),
-),
-),
-),
-array(
-'key'               => 'field_spx_admin_roles',
-'label'             => 'Permitted User Groups',
-'name'              => 'spx_permitted_user_groups',
-'type'              => 'select',
-'multiple'          => 1,
-'return_format'     => 'value',
-'conditional_logic' => array(
-array(
-array(
-'field'    => 'field_spx_admin_restricted',
-'operator' => '==',
-'value'    => '1',
-),
-),
-),
-),
-array(
-'key'               => 'field_spx_admin_users',
-'label'             => 'Permitted User Access',
-'name'              => 'spx_permitted_user_access',
-'type'              => 'user',
-'multiple'          => 1,
-'return_format'     => 'array',
-'conditional_logic' => array(
-array(
-array(
-'field'    => 'field_spx_admin_restricted',
-'operator' => '==',
-'value'    => '1',
-),
-),
-),
-),
-),
-)
-);
+                                    'field'    => 'field_spx_frontend_enabled',
+                                    'operator' => '==',
+                                    'value'    => '1',
+                                ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'key'           => 'field_spx_admin_restricted',
+                        'label'         => 'Restrict WP-Admin',
+                        'name'          => 'spx_restrict_wp_admin',
+                        'type'          => 'true_false',
+                        'ui'            => 1,
+                        'default_value' => 1,
+                    ),
+                    array(
+                        'key'               => 'field_spx_admin_redirect',
+                        'label'             => 'Redirect URL After Login',
+                        'name'              => 'spx_redirect_url_after_login',
+                        'type'              => 'url',
+                        'default_value'     => home_url( '/star-dashboard/' ),
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field'    => 'field_spx_admin_restricted',
+                                    'operator' => '==',
+                                    'value'    => '1',
+                                ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'key'               => 'field_spx_admin_roles',
+                        'label'             => 'Permitted User Groups',
+                        'name'              => 'spx_permitted_user_groups',
+                        'type'              => 'select',
+                        'multiple'          => 1,
+                        'return_format'     => 'value',
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field'    => 'field_spx_admin_restricted',
+                                    'operator' => '==',
+                                    'value'    => '1',
+                                ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'key'               => 'field_spx_admin_users',
+                        'label'             => 'Permitted User Access',
+                        'name'              => 'spx_permitted_user_access',
+                        'type'              => 'user',
+                        'multiple'          => 1,
+                        'return_format'     => 'array',
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field'    => 'field_spx_admin_restricted',
+                                    'operator' => '==',
+                                    'value'    => '1',
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            )
+        );
 
-acf_add_local_field_group(
-array(
-'key'      => 'group_spx_frontend',
-'title'    => 'Frontend Restrictions',
-'location' => array(
-array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'post' ) ),
-array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'page' ) ),
-),
-'position' => 'side',
-'fields'   => array(
-array(
-'key'           => 'field_spx_restrict',
-'label'         => 'Restrict Frontend Access',
-'name'          => 'spx_frontend_restriction',
-'type'          => 'true_false',
-'default_value' => 0,
-),
-array(
-'key'               => 'field_spx_state',
-'label'             => 'Allow If',
-'name'              => 'spx_frontend_allow_if',
-'type'              => 'select',
-'choices'           => array(
-'logged_in'  => 'Logged In',
-'logged_out' => 'Logged Out',
-'all'        => 'All',
-),
-'default_value'     => 'logged_in',
-'conditional_logic' => array(
-array(
-array(
-'field'    => 'field_spx_restrict',
-'operator' => '==',
-'value'    => '1',
-),
-),
-),
-),
-array(
-'key'               => 'field_spx_roles',
-'label'             => 'Allowed Roles',
-'name'              => 'spx_frontend_allowed_roles',
-'type'              => 'select',
-'multiple'          => 1,
-'ui'                => 1,
-'conditional_logic' => array(
-array(
-array( 'field' => 'field_spx_restrict', 'operator' => '==', 'value' => '1' ),
-array( 'field' => 'field_spx_state', 'operator' => '==', 'value' => 'logged_in' ),
-),
-array(
-array( 'field' => 'field_spx_restrict', 'operator' => '==', 'value' => '1' ),
-array( 'field' => 'field_spx_state', 'operator' => '==', 'value' => 'logged_out' ),
-),
-),
-),
-array(
-'key'               => 'field_spx_users',
-'label'             => 'Allowed Users',
-'name'              => 'spx_frontend_allowed_users',
-'type'              => 'user',
-'multiple'          => 1,
-'return_format'     => 'array',
-'conditional_logic' => array(
-array(
-array( 'field' => 'field_spx_restrict', 'operator' => '==', 'value' => '1' ),
-array( 'field' => 'field_spx_state', 'operator' => '==', 'value' => 'logged_in' ),
-),
-),
-),
-array(
-'key'               => 'field_spx_redirect',
-'label'             => 'Redirect URL',
-'name'              => 'spx_frontend_redirect_url',
-'type'              => 'url',
-'instructions'      => 'Leave empty to use Default.',
-'conditional_logic' => array(
-array(
-array(
-'field'    => 'field_spx_restrict',
-'operator' => '==',
-'value'    => '1',
-),
-),
-),
-),
-),
-)
-);
-}
+        acf_add_local_field_group(
+            array(
+                'key'      => 'group_spx_frontend',
+                'title'    => 'Frontend Restrictions',
+                'location' => array(
+                    array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'post' ) ),
+                    array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'page' ) ),
+                ),
+                'position' => 'side',
+                'fields'   => array(
+                    array(
+                        'key'           => 'field_spx_restrict',
+                        'label'         => 'Restrict Frontend Access',
+                        'name'          => 'spx_frontend_restriction',
+                        'type'          => 'true_false',
+                        'default_value' => 0,
+                    ),
+                    array(
+                        'key'               => 'field_spx_state',
+                        'label'             => 'Allow If',
+                        'name'              => 'spx_frontend_allow_if',
+                        'type'              => 'select',
+                        'choices'           => array(
+                            'logged_in'  => 'Logged In',
+                            'logged_out' => 'Logged Out',
+                            'all'        => 'All',
+                        ),
+                        'default_value'     => 'logged_in',
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field'    => 'field_spx_restrict',
+                                    'operator' => '==',
+                                    'value'    => '1',
+                                ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'key'               => 'field_spx_roles',
+                        'label'             => 'Allowed Roles',
+                        'name'              => 'spx_frontend_allowed_roles',
+                        'type'              => 'select',
+                        'multiple'          => 1,
+                        'ui'                => 1,
+                        'conditional_logic' => array(
+                            array(
+                                array( 'field' => 'field_spx_restrict', 'operator' => '==', 'value' => '1' ),
+                                array( 'field' => 'field_spx_state', 'operator' => '==', 'value' => 'logged_in' ),
+                            ),
+                            array(
+                                array( 'field' => 'field_spx_restrict', 'operator' => '==', 'value' => '1' ),
+                                array( 'field' => 'field_spx_state', 'operator' => '==', 'value' => 'logged_out' ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'key'               => 'field_spx_users',
+                        'label'             => 'Allowed Users',
+                        'name'              => 'spx_frontend_allowed_users',
+                        'type'              => 'user',
+                        'multiple'          => 1,
+                        'return_format'     => 'array',
+                        'conditional_logic' => array(
+                            array(
+                                array( 'field' => 'field_spx_restrict', 'operator' => '==', 'value' => '1' ),
+                                array( 'field' => 'field_spx_state', 'operator' => '==', 'value' => 'logged_in' ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'key'               => 'field_spx_redirect',
+                        'label'             => 'Redirect URL',
+                        'name'              => 'spx_frontend_redirect_url',
+                        'type'              => 'url',
+                        'instructions'      => 'Leave empty to use Default.',
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field'    => 'field_spx_restrict',
+                                    'operator' => '==',
+                                    'value'    => '1',
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            )
+        );
+    }
 );
 
 /* --------------------------------------------------------------------------

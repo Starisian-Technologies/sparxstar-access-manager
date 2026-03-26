@@ -19,7 +19,7 @@ Main plugin orchestrator class.
 Get the singleton instance of the plugin.
 
 ```php
-$plugin = \StarisianTechnologies\SparxstarAccessManager\Plugin::get_instance();
+$plugin = \Starisian\Sparxstar\BosonScaffold\Plugin::get_instance();
 ```
 
 #### `init(): void`
@@ -196,7 +196,7 @@ Sanitize and validate settings input.
 
 ## Filters
 
-### `sparxstar_access_manager_scf_options`
+### `spx_boson_scf_options`
 
 Modify SCF options after they're loaded from the database.
 
@@ -206,7 +206,7 @@ Modify SCF options after they're loaded from the database.
 **Example:**
 
 ```php
-add_filter('sparxstar_access_manager_scf_options', function($options) {
+add_filter('spx_boson_scf_options', function($options) {
     // Add a custom option
     $options['custom_field'] = 'custom_value';
     
@@ -221,7 +221,7 @@ add_filter('sparxstar_access_manager_scf_options', function($options) {
 
 ---
 
-### `sparxstar_access_manager_rules`
+### `spx_boson_rules`
 
 Modify rules before they're enforced.
 
@@ -231,7 +231,7 @@ Modify rules before they're enforced.
 **Example:**
 
 ```php
-add_filter('sparxstar_access_manager_rules', function($rules) {
+add_filter('spx_boson_rules', function($rules) {
     // Add a custom rule
     $rules[] = [
         'type' => 'custom_type',
@@ -245,7 +245,7 @@ add_filter('sparxstar_access_manager_rules', function($rules) {
 
 ---
 
-### `sparxstar_access_manager_handle_rule`
+### `spx_boson_handle_rule`
 
 Handle custom rule types.
 
@@ -256,7 +256,7 @@ Handle custom rule types.
 **Example:**
 
 ```php
-add_filter('sparxstar_access_manager_handle_rule', function($handled, $rule) {
+add_filter('spx_boson_handle_rule', function($handled, $rule) {
     if ($rule['type'] === 'my_custom_rule') {
         // Handle your custom rule logic
         if ($rule['enabled']) {
@@ -272,7 +272,7 @@ add_filter('sparxstar_access_manager_handle_rule', function($handled, $rule) {
 
 ## Actions
 
-### `sparxstar_access_manager_options_loaded`
+### `spx_boson_options_loaded`
 
 Fired after SCF options are loaded.
 
@@ -282,7 +282,7 @@ Fired after SCF options are loaded.
 **Example:**
 
 ```php
-add_action('sparxstar_access_manager_options_loaded', function($options) {
+add_action('spx_boson_options_loaded', function($options) {
     // React to options being loaded
     error_log('SCF options loaded: ' . print_r($options, true));
 });
@@ -290,7 +290,7 @@ add_action('sparxstar_access_manager_options_loaded', function($options) {
 
 ---
 
-### `sparxstar_access_manager_rules_enforced`
+### `spx_boson_rules_enforced`
 
 Fired after rules are enforced.
 
@@ -300,7 +300,7 @@ Fired after rules are enforced.
 **Example:**
 
 ```php
-add_action('sparxstar_access_manager_rules_enforced', function($rules) {
+add_action('spx_boson_rules_enforced', function($rules) {
     // React to rules being enforced
     $count = count($rules);
     error_log("Enforced {$count} rules");
@@ -309,7 +309,7 @@ add_action('sparxstar_access_manager_rules_enforced', function($rules) {
 
 ---
 
-### `sparxstar_access_manager_access_control_rule`
+### `spx_boson_access_control_rule`
 
 Fired when an access control rule is applied.
 
@@ -319,7 +319,7 @@ Fired when an access control rule is applied.
 **Example:**
 
 ```php
-add_action('sparxstar_access_manager_access_control_rule', function($rule) {
+add_action('spx_boson_access_control_rule', function($rule) {
     // Custom access control logic
     if ($rule['condition'] === 'user_role') {
         // Check user role
@@ -329,7 +329,7 @@ add_action('sparxstar_access_manager_access_control_rule', function($rule) {
 
 ---
 
-### `sparxstar_access_manager_field_validation_rule`
+### `spx_boson_field_validation_rule`
 
 Fired when a field validation rule is applied.
 
@@ -339,14 +339,14 @@ Fired when a field validation rule is applied.
 **Example:**
 
 ```php
-add_action('sparxstar_access_manager_field_validation_rule', function($rule) {
+add_action('spx_boson_field_validation_rule', function($rule) {
     // Custom validation logic
 });
 ```
 
 ---
 
-### `sparxstar_access_manager_content_restriction_rule`
+### `spx_boson_content_restriction_rule`
 
 Fired when a content restriction rule is applied.
 
@@ -356,14 +356,14 @@ Fired when a content restriction rule is applied.
 **Example:**
 
 ```php
-add_action('sparxstar_access_manager_content_restriction_rule', function($rule) {
+add_action('spx_boson_content_restriction_rule', function($rule) {
     // Custom content restriction logic
 });
 ```
 
 ---
 
-### `sparxstar_access_manager_unknown_rule_type`
+### `spx_boson_unknown_rule_type`
 
 Fired when an unknown rule type is encountered.
 
@@ -374,7 +374,7 @@ Fired when an unknown rule type is encountered.
 **Example:**
 
 ```php
-add_action('sparxstar_access_manager_unknown_rule_type', function($rule_type, $rule) {
+add_action('spx_boson_unknown_rule_type', function($rule_type, $rule) {
     error_log("Unknown rule type: {$rule_type}");
 }, 10, 2);
 ```
@@ -454,44 +454,44 @@ Restricts content based on rules.
 
 ## Constants
 
-### `SPARXSTAR_ACCESS_MANAGER_VERSION`
+### `SPX_BOSON_VERSION`
 
 Plugin version string.
 
 ```php
-echo SPARXSTAR_ACCESS_MANAGER_VERSION; // "1.0.0"
+echo SPX_BOSON_VERSION; // "1.0.0"
 ```
 
-### `SPARXSTAR_ACCESS_MANAGER_PLUGIN_FILE`
+### `SPX_BOSON_PLUGIN_FILE`
 
 Full path to main plugin file.
 
 ```php
-echo SPARXSTAR_ACCESS_MANAGER_PLUGIN_FILE;
+echo SPX_BOSON_PLUGIN_FILE;
 ```
 
-### `SPARXSTAR_ACCESS_MANAGER_PLUGIN_DIR`
+### `SPX_BOSON_PLUGIN_DIR`
 
 Plugin directory path with trailing slash.
 
 ```php
-require_once SPARXSTAR_ACCESS_MANAGER_PLUGIN_DIR . 'includes/file.php';
+require_once SPX_BOSON_PLUGIN_DIR . 'includes/file.php';
 ```
 
-### `SPARXSTAR_ACCESS_MANAGER_PLUGIN_URL`
+### `SPX_BOSON_PLUGIN_URL`
 
 Plugin URL with trailing slash.
 
 ```php
-echo SPARXSTAR_ACCESS_MANAGER_PLUGIN_URL . 'assets/style.css';
+echo SPX_BOSON_PLUGIN_URL . 'assets/style.css';
 ```
 
-### `SPARXSTAR_ACCESS_MANAGER_PLUGIN_BASENAME`
+### `SPX_BOSON_PLUGIN_BASENAME`
 
 Plugin basename (directory/file.php).
 
 ```php
-echo SPARXSTAR_ACCESS_MANAGER_PLUGIN_BASENAME;
+echo SPX_BOSON_PLUGIN_BASENAME;
 ```
 
 ---
@@ -507,7 +507,7 @@ echo SPARXSTAR_ACCESS_MANAGER_PLUGIN_BASENAME;
  */
 
 // Modify SCF options
-add_filter('sparxstar_access_manager_scf_options', function($options) {
+add_filter('spx_boson_scf_options', function($options) {
     $options['custom_integration'] = [
         'enabled' => true,
         'api_key' => get_option('my_api_key')
@@ -516,7 +516,7 @@ add_filter('sparxstar_access_manager_scf_options', function($options) {
 });
 
 // Add custom rules
-add_filter('sparxstar_access_manager_rules', function($rules) {
+add_filter('spx_boson_rules', function($rules) {
     $rules[] = [
         'type' => 'api_access',
         'enabled' => true,
@@ -526,7 +526,7 @@ add_filter('sparxstar_access_manager_rules', function($rules) {
 });
 
 // Handle custom rule type
-add_filter('sparxstar_access_manager_handle_rule', function($handled, $rule) {
+add_filter('spx_boson_handle_rule', function($handled, $rule) {
     if ($rule['type'] === 'api_access' && $rule['enabled']) {
         // Implement API access control
         add_filter('rest_pre_dispatch', function($result, $server, $request) use ($rule) {
@@ -549,7 +549,7 @@ add_filter('sparxstar_access_manager_handle_rule', function($handled, $rule) {
 }, 10, 2);
 
 // React to options loaded
-add_action('sparxstar_access_manager_options_loaded', function($options) {
+add_action('spx_boson_options_loaded', function($options) {
     if (isset($options['custom_integration'])) {
         // Initialize custom integration
     }
@@ -566,10 +566,10 @@ Each subsite has its own independent configuration stored in its own options tab
 
 ```php
 // On site 1
-$site_1_options = get_blog_option(1, 'sparxstar_access_manager_options');
+$site_1_options = get_blog_option(1, 'spx_boson_options');
 
 // On site 2
-$site_2_options = get_blog_option(2, 'sparxstar_access_manager_options');
+$site_2_options = get_blog_option(2, 'spx_boson_options');
 
 // These are completely independent
 ```
@@ -586,7 +586,7 @@ $original_site = get_current_blog_id();
 switch_to_blog(2);
 
 // Get site 2's SCF manager options
-$plugin = \StarisianTechnologies\SparxstarAccessManager\Plugin::get_instance();
+$plugin = \Starisian\Sparxstar\BosonScaffold\Plugin::get_instance();
 $scf_manager = $plugin->get_scf_manager();
 $site_2_options = $scf_manager->get_options();
 
@@ -603,7 +603,7 @@ The plugin includes built-in error handling:
 ```php
 // JSON validation errors are added as settings errors
 add_action('admin_notices', function() {
-    settings_errors('sparxstar_access_manager_options');
+    settings_errors('spx_boson_options');
 });
 ```
 
@@ -615,7 +615,7 @@ add_action('admin_notices', function() {
 
 ```php
 public function test_custom_scf_filter() {
-    add_filter('sparxstar_access_manager_scf_options', function($options) {
+    add_filter('spx_boson_scf_options', function($options) {
         $options['test'] = 'value';
         return $options;
     });

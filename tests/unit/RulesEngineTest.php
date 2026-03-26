@@ -2,46 +2,49 @@
 /**
  * Test for Rules Engine
  *
- * @package StarisianTechnologies\SparxstarAccessManager\Tests
+ * @package   Starisian\Sparxstar\BosonScaffold\Tests
+ * @license   MIT https://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2026 Starisian Technologies
  */
 
-namespace StarisianTechnologies\SparxstarAccessManager\Tests;
+declare(strict_types=1);
+
+namespace Starisian\Sparxstar\BosonScaffold\Tests;
 
 use PHPUnit\Framework\TestCase;
-use StarisianTechnologies\SparxstarAccessManager\SecureCustomFieldManager;
-use StarisianTechnologies\SparxstarAccessManager\RulesEngine;
+use Starisian\Sparxstar\BosonScaffold\SecureCustomFieldManager;
+use Starisian\Sparxstar\BosonScaffold\RulesEngine;
 
 /**
- * Test RulesEngine class
+ * Tests for RulesEngine.
  */
 class RulesEngineTest extends TestCase {
+
     /**
-     * Test that rules engine can be instantiated
+     * Rules engine can be instantiated.
      */
-    public function test_engine_can_be_instantiated() {
+    public function test_engine_can_be_instantiated(): void {
         $scf_manager = new SecureCustomFieldManager();
-        $engine = new RulesEngine( $scf_manager );
+        $engine      = new RulesEngine( $scf_manager );
         $this->assertInstanceOf( RulesEngine::class, $engine );
     }
 
     /**
-     * Test getting rules returns array
+     * get_rules() returns an array.
      */
-    public function test_get_rules_returns_array() {
+    public function test_get_rules_returns_array(): void {
         $scf_manager = new SecureCustomFieldManager();
-        $engine = new RulesEngine( $scf_manager );
-        $rules = $engine->get_rules();
+        $engine      = new RulesEngine( $scf_manager );
+        $rules       = $engine->get_rules();
         $this->assertIsArray( $rules );
     }
 
     /**
-     * Test enforce rules doesn't throw exception
+     * enforce_rules() executes without exception.
      */
-    public function test_enforce_rules_executes() {
+    public function test_enforce_rules_executes(): void {
         $scf_manager = new SecureCustomFieldManager();
-        $engine = new RulesEngine( $scf_manager );
-        
-        // Should not throw exception
+        $engine      = new RulesEngine( $scf_manager );
         $engine->enforce_rules();
         $this->assertTrue( true );
     }

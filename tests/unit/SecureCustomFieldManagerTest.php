@@ -2,50 +2,54 @@
 /**
  * Test for Secure Custom Field Manager
  *
- * @package StarisianTechnologies\SparxstarAccessManager\Tests
+ * @package   Starisian\Sparxstar\BosonScaffold\Tests
+ * @license   MIT https://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2026 Starisian Technologies
  */
 
-namespace StarisianTechnologies\SparxstarAccessManager\Tests;
+declare(strict_types=1);
+
+namespace Starisian\Sparxstar\BosonScaffold\Tests;
 
 use PHPUnit\Framework\TestCase;
-use StarisianTechnologies\SparxstarAccessManager\SecureCustomFieldManager;
+use Starisian\Sparxstar\BosonScaffold\SecureCustomFieldManager;
 
 /**
- * Test SecureCustomFieldManager class
+ * Tests for SecureCustomFieldManager.
  */
 class SecureCustomFieldManagerTest extends TestCase {
+
     /**
-     * Test that manager can be instantiated
+     * Manager can be instantiated.
      */
-    public function test_manager_can_be_instantiated() {
+    public function test_manager_can_be_instantiated(): void {
         $manager = new SecureCustomFieldManager();
         $this->assertInstanceOf( SecureCustomFieldManager::class, $manager );
     }
 
     /**
-     * Test getting options returns array
+     * get_options() returns an array.
      */
-    public function test_get_options_returns_array() {
+    public function test_get_options_returns_array(): void {
         $manager = new SecureCustomFieldManager();
         $options = $manager->get_options();
         $this->assertIsArray( $options );
     }
 
     /**
-     * Test getting specific option with default
+     * get_option() returns the supplied default when key is absent.
      */
-    public function test_get_option_with_default() {
+    public function test_get_option_with_default(): void {
         $manager = new SecureCustomFieldManager();
-        $value = $manager->get_option( 'nonexistent_key', 'default_value' );
+        $value   = $manager->get_option( 'nonexistent_key', 'default_value' );
         $this->assertEquals( 'default_value', $value );
     }
 
     /**
-     * Test plugin enabled state when options don't exist
+     * Plugin defaults to enabled when no option is stored.
      */
-    public function test_is_enabled_default() {
+    public function test_is_enabled_default(): void {
         $manager = new SecureCustomFieldManager();
-        // With mocked get_option returning false (no option), plugin should default to enabled
         $this->assertTrue( $manager->is_enabled() );
     }
 }

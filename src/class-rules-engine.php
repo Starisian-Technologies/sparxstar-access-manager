@@ -2,94 +2,90 @@
 /**
  * Rules Engine
  *
- * @package StarisianTechnologies\SparxstarAccessManager
+ * @package   Starisian\Sparxstar\BosonScaffold
+ * @license   MIT https://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2026 Starisian Technologies
  */
 
-namespace StarisianTechnologies\SparxstarAccessManager;
+declare(strict_types=1);
+
+namespace Starisian\Sparxstar\BosonScaffold;
 
 /**
- * Enforces runtime rules based on SCF options
+ * Enforces runtime rules based on SCF options.
+ *
+ * Extend or replace the built-in rule types via the spx_boson_handle_rule filter.
+ * Rename all spx_boson_ hooks when building your own project.
  */
 class RulesEngine {
+
     /**
-     * SCF Manager instance
+     * SCF Manager instance.
      *
      * @var SecureCustomFieldManager
      */
-    private $scf_manager;
+    private SecureCustomFieldManager $scf_manager;
 
     /**
-     * Rules loaded from options
+     * Rules loaded from options.
      *
-     * @var array
+     * @var array<int, array<string, mixed>>
      */
-    private $rules = array();
+    private array $rules = array();
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param SecureCustomFieldManager $scf_manager SCF Manager instance
+     * @param SecureCustomFieldManager $scf_manager SCF Manager instance.
      */
     public function __construct( SecureCustomFieldManager $scf_manager ) {
         $this->scf_manager = $scf_manager;
     }
 
     /**
-     * Enforce rules
+     * Enforce all configured rules.
+     *
+     * Fires the spx_boson_rules_enforced action after all rules are processed.
      */
-    public function enforce_rules() {
-        // Skip if plugin is not enabled
+    public function enforce_rules(): void {
         if ( ! $this->scf_manager->is_enabled() ) {
             return;
         }
 
-        // Load rules from plugin options
         $plugin_options = $this->scf_manager->get_plugin_options();
-        if ( isset( $plugin_options['rules'] ) ) {
-            $this->rules = $plugin_options['rules'];
-        }
+        $this->rules    = isset( $plugin_options['rules'] ) && is_array( $plugin_options['rules'] )
+            ? $plugin_options['rules']
+            : array();
 
-        // Allow filtering of rules
-        $this->rules = apply_filters( 'sparxstar_access_manager_rules', $this->rules );
+        /** @var array<int, array<string, mixed>> $filtered */
+        $filtered    = apply_filters( 'spx_boson_rules', $this->rules );
+        $this->rules = $filtered;
 
-        // Ensure rules is an array before iterating
-        if ( ! is_array( $this->rules ) ) {
-            $this->rules = array();
-        }
-
-        // Apply each rule
         foreach ( $this->rules as $rule ) {
             $this->apply_rule( $rule );
         }
 
-        // Action hook after rules are enforced
-        do_action( 'sparxstar_access_manager_rules_enforced', $this->rules );
+        do_action( 'spx_boson_rules_enforced', $this->rules );
     }
 
     /**
-     * Apply a single rule
+     * Apply a single rule.
      *
-     * @param array $rule Rule configuration
+     * @param array<string, mixed> $rule Rule configuration.
      */
-    private function apply_rule( $rule ) {
-        if ( ! is_array( $rule ) ) {
-            return;
-        }
-        if ( ! isset( $rule['type'] ) || ! isset( $rule['enabled'] ) || ! $rule['enabled'] ) {
+    private function apply_rule( array $rule ): void {
+        if ( ! isset( $rule['type'], $rule['enabled'] ) || ! $rule['enabled'] ) {
             return;
         }
 
-        $rule_type = $rule['type'];
-        
-        // Allow custom rule handlers
-        $handled = apply_filters( 'sparxstar_access_manager_handle_rule', false, $rule );
-        
+        /** @var bool $handled */
+        $handled = apply_filters( 'spx_boson_handle_rule', false, $rule );
+
         if ( $handled ) {
             return;
         }
 
-        // Built-in rule types
-        switch ( $rule_type ) {
+        switch ( (string) $rule['type'] ) {
             case 'access_control':
                 $this->apply_access_control_rule( $rule );
                 break;
@@ -100,48 +96,44 @@ class RulesEngine {
                 $this->apply_content_restriction_rule( $rule );
                 break;
             default:
-                // Unknown rule type
-                do_action( 'sparxstar_access_manager_unknown_rule_type', $rule_type, $rule );
+                do_action( 'spx_boson_unknown_rule_type', (string) $rule['type'], $rule );
                 break;
         }
     }
 
     /**
-     * Apply access control rule
+     * Apply an access control rule.
      *
-     * @param array $rule Rule configuration
+     * @param array<string, mixed> $rule Rule configuration.
      */
-    private function apply_access_control_rule( $rule ) {
-        // Access control implementation
-        do_action( 'sparxstar_access_manager_access_control_rule', $rule );
+    private function apply_access_control_rule( array $rule ): void {
+        do_action( 'spx_boson_access_control_rule', $rule );
     }
 
     /**
-     * Apply field validation rule
+     * Apply a field validation rule.
      *
-     * @param array $rule Rule configuration
+     * @param array<string, mixed> $rule Rule configuration.
      */
-    private function apply_field_validation_rule( $rule ) {
-        // Field validation implementation
-        do_action( 'sparxstar_access_manager_field_validation_rule', $rule );
+    private function apply_field_validation_rule( array $rule ): void {
+        do_action( 'spx_boson_field_validation_rule', $rule );
     }
 
     /**
-     * Apply content restriction rule
+     * Apply a content restriction rule.
      *
-     * @param array $rule Rule configuration
+     * @param array<string, mixed> $rule Rule configuration.
      */
-    private function apply_content_restriction_rule( $rule ) {
-        // Content restriction implementation
-        do_action( 'sparxstar_access_manager_content_restriction_rule', $rule );
+    private function apply_content_restriction_rule( array $rule ): void {
+        do_action( 'spx_boson_content_restriction_rule', $rule );
     }
 
     /**
-     * Get all rules
+     * Get all configured rules.
      *
-     * @return array
+     * @return array<int, array<string, mixed>>
      */
-    public function get_rules() {
+    public function get_rules(): array {
         return $this->rules;
     }
 }

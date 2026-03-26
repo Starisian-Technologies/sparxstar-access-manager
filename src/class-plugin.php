@@ -2,49 +2,55 @@
 /**
  * Main Plugin Class
  *
- * @package StarisianTechnologies\SparxstarAccessManager
+ * @package   Starisian\Sparxstar\BosonScaffold
+ * @license   MIT https://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2026 Starisian Technologies
  */
 
-namespace StarisianTechnologies\SparxstarAccessManager;
+declare(strict_types=1);
+
+namespace Starisian\Sparxstar\BosonScaffold;
 
 /**
- * Main plugin class
+ * Main plugin orchestrator class (singleton).
+ *
+ * Rename this class and its namespace when building your own project.
  */
 class Plugin {
     /**
-     * Plugin instance
+     * Plugin instance.
      *
-     * @var Plugin
+     * @var Plugin|null
      */
-    private static $instance = null;
+    private static ?Plugin $instance = null;
 
     /**
-     * Secure Custom Field Manager
+     * Secure Custom Field Manager.
      *
-     * @var SecureCustomFieldManager
+     * @var SecureCustomFieldManager|null
      */
-    private $scf_manager;
+    private ?SecureCustomFieldManager $scf_manager = null;
 
     /**
-     * Rules Engine
+     * Rules Engine.
      *
-     * @var RulesEngine
+     * @var RulesEngine|null
      */
-    private $rules_engine;
+    private ?RulesEngine $rules_engine = null;
 
     /**
-     * Admin Manager
+     * Admin Manager.
      *
-     * @var AdminManager
+     * @var AdminManager|null
      */
-    private $admin_manager;
+    private ?AdminManager $admin_manager = null;
 
     /**
-     * Get plugin instance
+     * Get plugin instance.
      *
      * @return Plugin
      */
-    public static function get_instance() {
+    public static function get_instance(): Plugin {
         if ( null === self::$instance ) {
             self::$instance = new self();
         }
@@ -52,113 +58,104 @@ class Plugin {
     }
 
     /**
-     * Constructor
+     * Private constructor (singleton).
      */
-    private function __construct() {
-        // Private constructor for singleton
-    }
+    private function __construct() {}
 
     /**
-     * Initialize the plugin
+     * Initialize the plugin.
      */
-    public function init() {
-        // Load required files
+    public function init(): void {
         $this->load_dependencies();
 
-        // Initialize managers
-        $this->scf_manager = new SecureCustomFieldManager();
-        $this->rules_engine = new RulesEngine( $this->scf_manager );
+        $this->scf_manager   = new SecureCustomFieldManager();
+        $this->rules_engine  = new RulesEngine( $this->scf_manager );
         $this->admin_manager = new AdminManager( $this->scf_manager );
 
-        // Setup hooks
         $this->setup_hooks();
     }
 
     /**
-     * Load plugin dependencies
+     * Load plugin class dependencies.
      */
-    private function load_dependencies() {
-        require_once SPARXSTAR_ACCESS_MANAGER_PLUGIN_DIR . 'src/class-secure-custom-field-manager.php';
-        require_once SPARXSTAR_ACCESS_MANAGER_PLUGIN_DIR . 'src/class-rules-engine.php';
-        require_once SPARXSTAR_ACCESS_MANAGER_PLUGIN_DIR . 'src/class-admin-manager.php';
+    private function load_dependencies(): void {
+        require_once SPX_BOSON_PLUGIN_DIR . 'src/class-secure-custom-field-manager.php';
+        require_once SPX_BOSON_PLUGIN_DIR . 'src/class-rules-engine.php';
+        require_once SPX_BOSON_PLUGIN_DIR . 'src/class-admin-manager.php';
+        require_once SPX_BOSON_PLUGIN_DIR . 'src/sparxstar-access-manager.php';
     }
 
     /**
-     * Setup WordPress hooks
+     * Register WordPress hooks.
      */
-    private function setup_hooks() {
-        // Initialize on init hook
+    private function setup_hooks(): void {
         add_action( 'init', array( $this->scf_manager, 'load_options' ), 5 );
         add_action( 'init', array( $this->rules_engine, 'enforce_rules' ), 10 );
 
-        // Admin hooks
         if ( is_admin() ) {
             add_action( 'admin_menu', array( $this->admin_manager, 'add_admin_menu' ) );
             add_action( 'admin_init', array( $this->admin_manager, 'register_settings' ) );
         }
 
-        // For multisite, ensure plugin is loaded on each subsite
         if ( is_multisite() ) {
             add_action( 'wpmu_new_blog', array( $this, 'activate_on_new_site' ), 10, 1 );
         }
     }
 
     /**
-     * Activate plugin for a specific site
+     * Activate plugin for a specific site.
      *
-     * @param int|null $site_id Site ID or null for single site
+     * @param int|null $site_id Site ID, or null for single-site installs.
      */
-    public static function activate_for_site( $site_id = null ) {
-        if ( $site_id ) {
+    public static function activate_for_site( ?int $site_id = null ): void {
+        if ( null !== $site_id ) {
             switch_to_blog( $site_id );
         }
 
-        // Set default options
         $default_options = array(
-            'enabled' => true,
+            'enabled'     => true,
             'scf_options' => array(),
-            'rules' => array(),
+            'rules'       => array(),
         );
 
-        add_option( 'sparxstar_access_manager_options', $default_options );
+        add_option( 'spx_boson_options', $default_options );
 
-        if ( $site_id ) {
+        if ( null !== $site_id ) {
             restore_current_blog();
         }
     }
 
     /**
-     * Activate on new multisite blog
+     * Auto-activate for a newly created multisite blog.
      *
-     * @param int $site_id Site ID
+     * @param int $site_id The new site ID.
      */
-    public function activate_on_new_site( $site_id ) {
+    public function activate_on_new_site( int $site_id ): void {
         self::activate_for_site( $site_id );
     }
 
     /**
-     * Deactivation cleanup
+     * Deactivation cleanup.
+     *
+     * Note: settings are intentionally preserved on deactivation.
      */
-    public static function deactivate() {
-        // Cleanup tasks if needed
-        // Note: We don't delete options on deactivation to preserve settings
-    }
+    public static function deactivate(): void {}
 
     /**
-     * Get SCF Manager
+     * Get the Secure Custom Field Manager instance.
      *
-     * @return SecureCustomFieldManager
+     * @return SecureCustomFieldManager|null
      */
-    public function get_scf_manager() {
+    public function get_scf_manager(): ?SecureCustomFieldManager {
         return $this->scf_manager;
     }
 
     /**
-     * Get Rules Engine
+     * Get the Rules Engine instance.
      *
-     * @return RulesEngine
+     * @return RulesEngine|null
      */
-    public function get_rules_engine() {
+    public function get_rules_engine(): ?RulesEngine {
         return $this->rules_engine;
     }
 }
